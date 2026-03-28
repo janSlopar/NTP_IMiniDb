@@ -88,6 +88,7 @@ object FormRegistracija: TFormRegistracija
       Top = 224
       Width = 121
       Height = 23
+      PasswordChar = '*'
       TabOrder = 4
     end
     object ButtonRegistriraj: TButton

@@ -28,6 +28,7 @@ bool sadrziBrojeve(String s)
 
 void __fastcall TFormRegistracija::ButtonRegistrirajClick(TObject *Sender)
 {
+    EditLozinka->PasswordChar = '*';
 	Korisnik K_test;
 
 	K_test.setIme(EditIme->Text);

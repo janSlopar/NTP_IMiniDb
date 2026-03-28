@@ -192,20 +192,20 @@
             <BuildOrder>1</BuildOrder>
             <PCH>true</PCH>
         </PCHCompile>
+        <CppCompile Include="Prijava.cpp">
+            <Form>FormPrijava</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>Prijava.h</DependentOn>
+            <BuildOrder>6</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Registracija.cpp">
             <Form>FormRegistracija</Form>
             <FormType>dfm</FormType>
             <DependentOn>Registracija.h</DependentOn>
             <BuildOrder>5</BuildOrder>
         </CppCompile>
-        <CppCompile Include="Unit1.cpp">
-            <Form>Form1</Form>
-            <FormType>dfm</FormType>
-            <DependentOn>Unit1.h</DependentOn>
-            <BuildOrder>2</BuildOrder>
-        </CppCompile>
         <FormResources Include="Registracija.dfm"/>
-        <FormResources Include="Unit1.dfm"/>
+        <FormResources Include="Prijava.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

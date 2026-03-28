@@ -7,7 +7,7 @@
 #include <DataTypes.cpp>
 //---------------------------------------------------------------------------
 USEFORM("Registracija.cpp", FormRegistracija);
-USEFORM("Unit1.cpp", Form1);
+USEFORM("Prijava.cpp", FormPrijava);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -15,8 +15,8 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 	{
 		Application->Initialize();
 		Application->MainFormOnTaskBar = true;
-		Application->CreateForm(__classid(TForm1), &Form1);
 		Application->CreateForm(__classid(TFormRegistracija), &FormRegistracija);
+		Application->CreateForm(__classid(TFormPrijava), &FormPrijava);
 		Application->Run();
 	}
 	catch (Exception &exception)
