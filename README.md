@@ -1,2 +1,3 @@
 # NTP---movieDB
-# Projekt movieDB 
+Projekt movieDB 
+Kao IMDb
