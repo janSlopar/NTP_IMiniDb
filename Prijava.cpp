@@ -5,6 +5,7 @@
 
 #include "Prijava.h"
 #include "DataTypes.h"
+#include "Jezik_INI.h"
 #include <registry.hpp>
 #include <System.IOUtils.hpp>
 //---------------------------------------------------------------------------
@@ -54,32 +55,9 @@ void __fastcall TFormPrijava::FormCreate(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TFormPrijava::ButtonHRVClick(TObject *Sender)
-{
-
-	String path = TPath::Combine(TPath::GetDocumentsPath(), "postavke.ini");
-	TIniFile* ini = new TIniFile(path);
-
-	Label1->Caption = ini->ReadString("HR", "label1", "");
-	Label2->Caption = ini->ReadString("HR", "label2", "");
-	ButtonPrijava->Caption = ini->ReadString("HR", "ButtonPrijava", "");
-
-	delete ini;
-
-}
+void __fastcall TFormPrijava::ButtonHRVClick(TObject *Sender) { PostaviJezik(this, "HR"); }
 //---------------------------------------------------------------------------
 
-
-void __fastcall TFormPrijava::ButtonENGClick(TObject *Sender)
-{
-	String path = TPath::Combine(TPath::GetDocumentsPath(), "postavke.ini");
-	TIniFile* ini = new TIniFile(path);
-
-	Label1->Caption = ini->ReadString("ENG", "label1", "");
-	Label2->Caption = ini->ReadString("ENG", "label2", "");
-	ButtonPrijava->Caption = ini->ReadString("ENG", "ButtonPrijava", "");
-
-	delete ini;
-}
+void __fastcall TFormPrijava::ButtonENGClick(TObject *Sender){ PostaviJezik(this, "ENG"); }
 //---------------------------------------------------------------------------
 

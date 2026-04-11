@@ -191,6 +191,10 @@
             <BuildOrder>1</BuildOrder>
             <PCH>true</PCH>
         </PCHCompile>
+        <CppCompile Include="Jezik_INI.cpp">
+            <DependentOn>Jezik_INI.h</DependentOn>
+            <BuildOrder>9</BuildOrder>
+        </CppCompile>
         <CppCompile Include="PregledFilmova.cpp">
             <Form>FormSviFilmovi</Form>
             <FormType>dfm</FormType>

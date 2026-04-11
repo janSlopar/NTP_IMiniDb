@@ -4,14 +4,13 @@
 #pragma hdrstop
 #include <tchar.h>
 #include "DataTypes.h"
-
 #include "Registracija.h"
 #include "Prijava.h"
 #include "Recenzija.h"
 #include "PregledFilmova.h"
-
 #include <Vcl.Styles.hpp>
 #include <Vcl.Themes.hpp>
+
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
 	try

@@ -8,6 +8,7 @@
 #include "Stilovi.h"
 #include <registry.hpp>
 #include <System.IOUtils.hpp>
+#include "Jezik_INI.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -68,11 +69,11 @@ void __fastcall TFormRegistracija::FormCreate(TObject *Sender)
 	reg->RootKey = HKEY_LOCAL_MACHINE;
 	reg->Access = KEY_READ | KEY_WRITE;
 
-	/*
+
     if (reg->OpenKey("Software\\IMiniDB", true))
 	{
 		if (!reg->ValueExists("IMiniDB"))
-			reg->WriteString("IMiniDB", FormatDateTime("dd.mm.yyyy", today));
+			reg->WriteString("IMiniDB", FormatDateTime("dd.mm.yyyy", Now()));
 		reg->CloseKey();
 	}
 
@@ -82,7 +83,6 @@ void __fastcall TFormRegistracija::FormCreate(TObject *Sender)
 			reg->WriteInteger("IMiniDB_korisnika", 0);
 		reg->CloseKey();
 	}
-	  */
 
 	try
 	{
@@ -124,35 +124,14 @@ void __fastcall TFormRegistracija::ButtonKonfClick(TObject *Sender)
 
 void __fastcall TFormRegistracija::ButtonHRVClick(TObject *Sender)
 {
-	String path = TPath::Combine(TPath::GetDocumentsPath(), "postavke.ini");
-	TIniFile* ini = new TIniFile(path);
-
-	Label1->Caption = ini->ReadString("HR", "label1", "-");
-	Label2->Caption = ini->ReadString("HR", "label2", "-");
-	Label3->Caption = ini->ReadString("HR", "label3", "-");
-	Label4->Caption = ini->ReadString("HR", "label4", "-");
-	Label5->Caption = ini->ReadString("HR", "label5", "-");
-	ButtonRegistriraj->Caption = ini->ReadString("HR", "ButtonRegistriraj", "-");
-	ButtonKonf->Caption = ini->ReadString("HR", "ButtonKonf", "-");
-
-	 delete ini;
+	PostaviJezik(this, "HR");
 }
 //---------------------------------------------------------------------------
 
+
 void __fastcall TFormRegistracija::ButtonENGClick(TObject *Sender)
 {
-	String path = TPath::Combine(TPath::GetDocumentsPath(), "postavke.ini");
-	TIniFile* ini = new TIniFile(path);
-
-	Label1->Caption = ini->ReadString("ENG", "label1", "-");
-	Label2->Caption = ini->ReadString("ENG", "label2", "-");
-	Label3->Caption = ini->ReadString("ENG", "label3", "-");
-	Label4->Caption = ini->ReadString("ENG", "label4", "-");
-	Label5->Caption = ini->ReadString("ENG", "label5", "-");
-	ButtonRegistriraj->Caption = ini->ReadString("ENG", "ButtonRegistriraj", "-");
-	ButtonKonf->Caption = ini->ReadString("ENG", "ButtonKonf", "-");
-
-	delete ini;
+    PostaviJezik(this, "ENG");
 }
 //---------------------------------------------------------------------------
 
