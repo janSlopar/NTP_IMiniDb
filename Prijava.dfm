@@ -57,4 +57,22 @@ object FormPrijava: TFormPrijava
       TabOrder = 2
     end
   end
+  object ButtonHRV: TButton
+    Left = 1016
+    Top = 16
+    Width = 99
+    Height = 33
+    Caption = 'Hrvatski'
+    TabOrder = 1
+    OnClick = ButtonHRVClick
+  end
+  object ButtonENG: TButton
+    Left = 1016
+    Top = 55
+    Width = 99
+    Height = 34
+    Caption = 'English'
+    TabOrder = 2
+    OnClick = ButtonENGClick
+  end
 end

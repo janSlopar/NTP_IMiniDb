@@ -117,4 +117,22 @@ object FormRegistracija: TFormRegistracija
     StyleName = 'Ruby Graphite'
     OnClick = ButtonKonfClick
   end
+  object ButtonHRV: TButton
+    Left = 1352
+    Top = 47
+    Width = 134
+    Height = 34
+    Caption = 'Hrvatski'
+    TabOrder = 2
+    OnClick = ButtonHRVClick
+  end
+  object ButtonENG: TButton
+    Left = 1352
+    Top = 87
+    Width = 134
+    Height = 34
+    Caption = 'English'
+    TabOrder = 3
+    OnClick = ButtonENGClick
+  end
 end

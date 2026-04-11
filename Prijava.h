@@ -17,8 +17,12 @@ __published:	// IDE-managed Components
 	TLabel *Label2;
 	TEdit *EditKorImePrijava;
 	TEdit *EditLozinkaPrijava;
+	TButton *ButtonHRV;
+	TButton *ButtonENG;
 	void __fastcall ButtonPrijavaClick(TObject *Sender);
 	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall ButtonHRVClick(TObject *Sender);
+	void __fastcall ButtonENGClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TFormPrijava(TComponent* Owner);

@@ -8,15 +8,10 @@
 #include "Registracija.h"
 #include "Prijava.h"
 #include "Recenzija.h"
-//#include "SviFilmovi.h"
+#include "PregledFilmova.h"
 
 #include <Vcl.Styles.hpp>
 #include <Vcl.Themes.hpp>
-USEFORM("Registracija.dfm", FormRegistracija);
-USEFORM("Prijava.dfm", FormPrijava);
-USEFORM("Recenzija.dfm", FormRecenzija);
-USEFORM("SviFilmovi.dfm", FormSviFilmovi);
-//---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
 	try
