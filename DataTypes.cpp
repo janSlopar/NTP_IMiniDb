@@ -59,13 +59,20 @@ Admin::Admin(int id, AnsiString username, AnsiString email, AnsiString lozinka, 
 
 
 // ================================================================== FILM ==================================================================
-Film::Film(int id, AnsiString naslov, int godina, int trajanje, AnsiString opis) : id(id), naslov(naslov), trajanje(trajanje), opis(opis)
+Film::Film(int id, AnsiString naslov, int godina, int trajanje, AnsiString opis) : id(id), naslov(naslov), godina(godina), trajanje(trajanje), opis(opis)
 {
 	if (godina < 1888 || godina > 2026)
 		this->godina = 2026;
     else
         this->godina = godina;
 }
+
+int Film::GetId()               { return id; }
+AnsiString Film::GetNaslov()    { return naslov; }
+int Film::GetGodina()           { return godina; }
+int Film::GetTrajanje()         { return trajanje; }
+AnsiString Film::GetOpis()      { return opis; }
+TBytes Film::GetPoster()        { return poster; }
 
 float Film::izracunajOcjenu() {
     // dohvati sve recenzije za ovaj film iz baze i izračunaj prosjek

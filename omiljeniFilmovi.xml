@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filmovi>
+	<film>
+		<id>1</id>
+		<naslov>Inception</naslov>
+		<godina>2010</godina>
+		<trajanje>148</trajanje>
+		<opis>Dom Cobb je iskusan lopov koji krade vrijedne tajne iz dubina podsvijesti dok su njegovi ciljevi u snu.</opis>
+		<poster></poster>
+	</film>
+	<film>
+		<id>2</id>
+		<naslov>The Dark Knight</naslov>
+		<godina>2008</godina>
+		<trajanje>152</trajanje>
+		<opis>Batman se suočava s Jokerom, kaotičnim kriminalcem koji želi baciti Gotham u anarhiju.</opis>
+		<poster></poster>
+	</film>
+	<film>
+		<id>3</id>
+		<naslov>Interstellar</naslov>
+		<godina>2014</godina>
+		<trajanje>169</trajanje>
+		<opis>Tim istraživača putuje kroz crv rupu u svemiru u pokušaju spašavanja čovječanstva.</opis>
+		<poster></poster>
+	</film>
+	<film>
+		<id>4</id>
+		<naslov>Shutter Island</naslov>
+		<godina>2010</godina>
+		<trajanje>138</trajanje>
+		<opis>Federalni marshal Teddy Daniels istražuje nestanak pacijentice s psihijatrijske ustanove na izoliranom otoku, no uskoro dovodi u pitanje vlastitu stvarnost.</opis>
+		<poster></poster>
+	</film>
+	<film>
+		<id>5</id>
+		<naslov>Prisoners</naslov>
+		<godina>2013</godina>
+		<trajanje>153</trajanje>
+		<opis>Kada mu nestane kćer, očajni otac uzima zakon u svoje ruke dok detektiv naporno radi na pronalasku otetih djevojčica.</opis>
+		<poster></poster>
+	</film>
+</filmovi>

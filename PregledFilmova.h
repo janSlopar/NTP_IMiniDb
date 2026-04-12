@@ -7,16 +7,40 @@
 #include <Vcl.Controls.hpp>
 #include <Vcl.StdCtrls.hpp>
 #include <Vcl.Forms.hpp>
+#include <Vcl.ComCtrls.hpp>
+#include <Vcl.ExtCtrls.hpp>
+#include <Xml.XMLDoc.hpp>
+#include <Xml.xmldom.hpp>
+#include <Xml.XMLIntf.hpp>
 //---------------------------------------------------------------------------
 class TFormSviFilmovi : public TForm
 {
 __published:	// IDE-managed Components
 	TButton *ButtonDodajWatchlistu;
-	TEdit *Edit1;
-	TEdit *Edit2;
-	TLabel *Label1;
-	TLabel *Label2;
+	TEdit *EditNoviNaziv;
+	TEdit *EditNovaGodina;
+	TLabel *Label6;
+	TLabel *Label7;
+	TButton *ButtonOmiljeniFilmovi;
+	TListView *listViewOFilmovi;
+	TImage *Image1;
+	TButton *ButtonHRV;
+	TButton *ButtonENG;
+	TXMLDocument *XMLDocumentOmiljeniFilmovi;
+	TButton *ButtonDodajNoviOFilm;
+	TButton *ButtonUkloni;
+	TEdit *EditNovoTrajanje;
+	TLabel *Label8;
+	TMemo *MemoOpisNovogFilma;
+	TLabel *Label9;
 	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall ButtonOmiljeniFilmoviClick(TObject *Sender);
+	void __fastcall ButtonHRVClick(TObject *Sender);
+	void __fastcall ButtonENGClick(TObject *Sender);
+	void __fastcall ButtonDodajNoviOFilmClick(TObject *Sender);
+	void __fastcall ButtonUkloniClick(TObject *Sender);
+	void __fastcall OsvjeziListu();
+	void __fastcall OcistiPolja();
 private:	// User declarations
 public:		// User declarations
 	__fastcall TFormSviFilmovi(TComponent* Owner);

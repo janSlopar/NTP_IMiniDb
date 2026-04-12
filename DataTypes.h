@@ -44,7 +44,13 @@ class Film {
         AnsiString opis;
         TBytes poster;
     public:
-        Film(int id, AnsiString naslov, int godina, int trajanje, AnsiString opis);
+		Film(int id, AnsiString naslov, int godina, int trajanje, AnsiString opis);
+        int GetId();
+        AnsiString GetNaslov();
+        int GetGodina();
+        int GetTrajanje();
+        AnsiString GetOpis();
+        TBytes GetPoster();
         float izracunajOcjenu();
         AnsiString dohvatiDetalje();
         void ucitajPoster(AnsiString putanja);

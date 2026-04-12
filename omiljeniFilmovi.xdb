@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xdb="http://www.borland.com/schemas/delphi/10.0/XMLDataBinding">
+  <xs:element name="filmovi" type="filmoviType"/>
+  <xs:complexType name="filmoviType"><xs:annotation>
+      <xs:appinfo xdb:docElement="filmovi"/>
+    </xs:annotation>
+    <sequence xmlns="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="film" type="filmType" maxOccurs="unbounded"/>
+    </sequence>
+  </xs:complexType>
+  <xs:complexType name="filmType">
+    <sequence xmlns="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="id" type="xs:integer"/>
+      <xs:element name="naslov" type="xs:string"/>
+      <xs:element name="godina" type="xs:integer"/>
+      <xs:element name="trajanje" type="xs:integer"/>
+      <xs:element name="opis" type="xs:string"/>
+      <xs:element name="poster" type="xs:string"/>
+    </sequence>
+  </xs:complexType>
+</xs:schema>
