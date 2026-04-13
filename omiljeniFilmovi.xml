@@ -40,4 +40,5 @@
 		<opis>Kada mu nestane kćer, očajni otac uzima zakon u svoje ruke dok detektiv naporno radi na pronalasku otetih djevojčica.</opis>
 		<poster></poster>
 	</film>
-</filmovi>
+	<film><id>6</id><naslov>dad</naslov><godina>1943</godina><trajanje>123</trajanje><opis>MemoOpisNovogFilma
+</opis></film></filmovi>

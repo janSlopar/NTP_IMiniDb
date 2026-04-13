@@ -27,9 +27,9 @@ object FormSviFilmovi: TFormSviFilmovi
   end
   object Image1: TImage
     Left = 871
-    Top = 520
+    Top = 504
     Width = 386
-    Height = 481
+    Height = 497
   end
   object Label8: TLabel
     Left = 798
@@ -46,12 +46,13 @@ object FormSviFilmovi: TFormSviFilmovi
     Caption = 'Opis:'
   end
   object ButtonDodajWatchlistu: TButton
-    Left = 275
-    Top = 8
+    Left = 1104
+    Top = 368
     Width = 145
     Height = 57
     Caption = 'Dodaj u Listu'
     TabOrder = 0
+    OnClick = ButtonDodajWatchlistuClick
   end
   object EditNoviNaziv: TEdit
     Left = 864
@@ -78,12 +79,12 @@ object FormSviFilmovi: TFormSviFilmovi
   end
   object listViewOFilmovi: TListView
     Left = 7
-    Top = 495
+    Top = 504
     Width = 858
     Height = 497
     Columns = <
       item
-        Caption = 'Naslov'
+        Caption = 'Naziv filma'
       end
       item
         Caption = 'Godina'

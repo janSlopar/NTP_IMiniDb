@@ -41,6 +41,7 @@ __published:	// IDE-managed Components
 	void __fastcall ButtonUkloniClick(TObject *Sender);
 	void __fastcall OsvjeziListu();
 	void __fastcall OcistiPolja();
+	void __fastcall ButtonDodajWatchlistuClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TFormSviFilmovi(TComponent* Owner);

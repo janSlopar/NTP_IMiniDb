@@ -39,8 +39,9 @@ void __fastcall TFormRegistracija::ButtonRegistrirajClick(TObject *Sender)
 
 void __fastcall TFormRegistracija::FormCreate(TObject *Sender)
 {
-
-	String path = TPath::Combine(TPath::GetDocumentsPath(), "postavke.ini");
+	//String jsonPath = TPath::Combine(ExtractFilePath(Application->ExeName), "..\\..\\listZaGledanje.json");
+	//String path = TPath::Combine(TPath::GetDocumentsPath(), "postavke.ini");
+	String path = TPath::Combine(ExtractFilePath(Application->ExeName), "..\\..\\postavke.ini");
 	TIniFile* ini = new TIniFile(path);
 
 	ButtonKonf->StyleName = ini->ReadString("Stilovi", "stil2", "0");
