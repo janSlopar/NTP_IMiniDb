@@ -216,7 +216,6 @@ void __fastcall TFormSviFilmovi::ButtonDodajNoviOFilmClick(TObject *Sender)
 
 void __fastcall TFormSviFilmovi::ButtonUkloniClick(TObject *Sender)
 {
-	//ukloni
 	String PorukaUpozorenja = "Odaberi film za uklanjanje!";
     if(listViewOFilmovi->Selected == NULL){
 		ShowMessage(PorukaUpozorenja);
@@ -228,7 +227,8 @@ void __fastcall TFormSviFilmovi::ButtonUkloniClick(TObject *Sender)
 	XMLDocumentOmiljeniFilmovi->SaveToFile(XMLDocumentOmiljeniFilmovi->FileName);
 
 	//listViewOFilmovi->Items->Delete(listViewOFilmovi->ItemIndex);
-    OsvjeziListu();
+	OsvjeziListu();
+    OcistiPolja();
 }
 //---------------------------------------------------------------------------
 
@@ -360,4 +360,38 @@ void __fastcall TFormSviFilmovi::ButtonPregledajListuClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TFormSviFilmovi::listViewOFilmoviSelectItem(TObject *Sender, TListItem *Item,
+          bool Selected)
+{
+    if (!Selected || Item == nullptr) return;
+
+    int idx = listViewOFilmovi->ItemIndex;
+    if (idx < 0) return;
+
+    _di_IXMLfilmoviType OFilmovi = Getfilmovi(XMLDocumentOmiljeniFilmovi);
+
+    if (idx >= OFilmovi->Count) return;
+
+    EditNoviNaziv->Text      = OFilmovi->film[idx]->naslov;
+    EditNovaGodina->Text     = IntToStr(OFilmovi->film[idx]->godina);
+    EditNovoTrajanje->Text   = IntToStr(OFilmovi->film[idx]->trajanje);
+    MemoOpisNovogFilma->Text = OFilmovi->film[idx]->opis;
+
+    // Poster - provjeri je li prazan
+	/*
+    IXMLNode *posterNode = film->ChildNodes->FindNode("poster");
+    if (posterNode != nullptr && posterNode->Text != "")
+    {
+        // npr. učitaj sliku ako imaš TImage
+        // Image1->Picture->LoadFromFile(posterNode->Text);
+        txtPoster->Text = posterNode->Text;
+    }
+    else
+    {
+        txtPoster->Text = "(nema postera)";
+    }
+	*/
+}
+//---------------------------------------------------------------------------
 

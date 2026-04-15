@@ -12,6 +12,8 @@
 #include <Xml.XMLDoc.hpp>
 #include <Xml.xmldom.hpp>
 #include <Xml.XMLIntf.hpp>
+#include <Xml.XMLDoc.hpp>
+#include <Xml.XMLIntf.hpp>
 //---------------------------------------------------------------------------
 class TFormSviFilmovi : public TForm
 {
@@ -48,6 +50,8 @@ __published:	// IDE-managed Components
 	void __fastcall OcistiPolja();
 	void __fastcall ButtonDodajWatchlistuClick(TObject *Sender);
 	void __fastcall ButtonPregledajListuClick(TObject *Sender);
+	void __fastcall listViewOFilmoviSelectItem(TObject *Sender, TListItem *Item, bool Selected);
+
 private:	// User declarations
 public:		// User declarations
 	__fastcall TFormSviFilmovi(TComponent* Owner);

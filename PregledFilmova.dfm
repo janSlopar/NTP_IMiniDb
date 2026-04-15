@@ -118,6 +118,7 @@ object FormSviFilmovi: TFormSviFilmovi
     HideSelection = False
     TabOrder = 4
     ViewStyle = vsReport
+    OnSelectItem = listViewOFilmoviSelectItem
   end
   object ButtonHRV: TButton
     Left = 1110
@@ -138,9 +139,9 @@ object FormSviFilmovi: TFormSviFilmovi
     OnClick = ButtonENGClick
   end
   object ButtonDodajNoviOFilm: TButton
-    Left = 1099
-    Top = 207
-    Width = 150
+    Left = 880
+    Top = 343
+    Width = 177
     Height = 58
     Caption = 'Dodaj novi'
     TabOrder = 7
@@ -148,8 +149,8 @@ object FormSviFilmovi: TFormSviFilmovi
   end
   object ButtonUkloni: TButton
     Left = 1099
-    Top = 271
-    Width = 150
+    Top = 207
+    Width = 145
     Height = 58
     Caption = 'Ukloni '
     TabOrder = 8
@@ -181,10 +182,10 @@ object FormSviFilmovi: TFormSviFilmovi
     OnClick = ButtonPregledajListuClick
   end
   object Button1: TButton
-    Left = 896
-    Top = 424
-    Width = 129
-    Height = 33
+    Left = 880
+    Top = 436
+    Width = 185
+    Height = 45
     Caption = 'Recenzije'
     TabOrder = 12
   end

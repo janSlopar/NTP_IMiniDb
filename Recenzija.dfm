@@ -13,8 +13,8 @@ object FormRecenzija: TFormRecenzija
   OnCreate = FormCreate
   TextHeight = 15
   object GroupBoxRecenzija: TGroupBox
-    Left = 0
-    Top = 8
+    Left = 96
+    Top = 56
     Width = 1041
     Height = 689
     TabOrder = 0
@@ -84,7 +84,7 @@ object FormRecenzija: TFormRecenzija
     object LabelOcjena7: TLabel
       Left = 584
       Top = 200
-      Width = 8
+      Width = 6
       Height = 15
       Caption = '7'
     end
@@ -98,14 +98,14 @@ object FormRecenzija: TFormRecenzija
     object LabelOcjena9: TLabel
       Left = 648
       Top = 200
-      Width = 8
+      Width = 6
       Height = 15
       Caption = '9'
     end
     object LabelOcjena10: TLabel
       Left = 672
       Top = 200
-      Width = 22
+      Width = 12
       Height = 15
       Caption = '10'
     end
@@ -129,7 +129,7 @@ object FormRecenzija: TFormRecenzija
     end
     object memTekst: TMemo
       Left = 288
-      Top = 40
+      Top = 365
       Width = 481
       Height = 97
       Lines.Strings = (
@@ -161,5 +161,13 @@ object FormRecenzija: TFormRecenzija
       Position = 1
       TabOrder = 5
     end
+  end
+  object cmbFilm: TComboBox
+    Left = 563
+    Top = 114
+    Width = 145
+    Height = 23
+    TabOrder = 1
+    OnChange = cmbFilmChange
   end
 end
