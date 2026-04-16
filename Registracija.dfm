@@ -136,9 +136,9 @@ object FormRegistracija: TFormRegistracija
     OnClick = ButtonENGClick
   end
   object DBGrid1: TDBGrid
-    Left = 1040
+    Left = 1032
     Top = 240
-    Width = 414
+    Width = 454
     Height = 273
     DataSource = DataSource1
     TabOrder = 4
@@ -147,31 +147,6 @@ object FormRegistracija: TFormRegistracija
     TitleFont.Height = -12
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
-    Columns = <
-      item
-        Expanded = False
-        Visible = True
-      end
-      item
-        Expanded = False
-        Visible = True
-      end
-      item
-        Expanded = False
-        Visible = True
-      end
-      item
-        Expanded = False
-        Visible = True
-      end
-      item
-        Expanded = False
-        Visible = True
-      end
-      item
-        Expanded = False
-        Visible = True
-      end>
   end
   object FDConnectionIMiniDB: TFDConnection
     Params.Strings = (

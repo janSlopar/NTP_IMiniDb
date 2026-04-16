@@ -106,6 +106,32 @@ void __fastcall TFormRegistracija::FormCreate(TObject *Sender)
 	{
 		reg->Free();
 	}
+
+
+	/*
+    try {
+	// Provjeri konekciju
+	if (!FDConnectionIMiniDB->Connected) {
+		ShowMessage("Konekcija NIJE spojena!");
+		return;
+    }
+    ShowMessage("Konekcija OK");
+
+	// Provjeri tablicu
+    FDTable1->Close();
+    FDTable1->Open();
+    ShowMessage(
+        "TableName: " + FDTable1->TableName + "\n" +
+        "FieldCount: " + IntToStr(FDTable1->FieldCount) + "\n" +
+		"RecordCount: " + IntToStr(FDTable1->RecordCount)
+    );
+
+	} catch (Exception &e) {
+		ShowMessage("GREŠKA: " + e.Message);
+	}
+
+	*/
+
 }
 //---------------------------------------------------------------------------
 
