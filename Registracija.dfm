@@ -138,7 +138,7 @@ object FormRegistracija: TFormRegistracija
   object DBGrid1: TDBGrid
     Left = 1032
     Top = 240
-    Width = 454
+    Width = 450
     Height = 273
     DataSource = DataSource1
     TabOrder = 4
@@ -155,6 +155,7 @@ object FormRegistracija: TFormRegistracija
       'Password=admin'
       'DriverID=MySQL')
     Connected = True
+    LoginPrompt = False
     Left = 824
     Top = 16
   end

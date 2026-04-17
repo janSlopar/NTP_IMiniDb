@@ -59,10 +59,28 @@ Admin::Admin(int id, AnsiString username, AnsiString email, AnsiString lozinka, 
 
 
 // ================================================================== FILM ==================================================================
+
 Film::Film(int id, AnsiString naslov, int godina, int trajanje, AnsiString opis) : id(id), naslov(naslov), godina(godina), trajanje(trajanje), opis(opis)
 {
 	if (godina < 1888 || godina > 2026)
 		this->godina = 2026;
+    else
+		this->godina = godina;
+}
+
+// --- dodatni konstruktor za puni zapis iz OMDb-a ---
+Film::Film(int id, AnsiString imdbID, AnsiString naslov, int godina,
+           int trajanje, AnsiString opis, AnsiString zanr,
+           AnsiString redatelj, AnsiString glumci,
+           double imdbRating, AnsiString posterUrl)
+    : id(id), naslov(naslov), trajanje(trajanje), opis(opis),
+      imdbID(imdbID), zanr(zanr), redatelj(redatelj), glumci(glumci),
+      imdbRating(imdbRating), posterUrl(posterUrl),
+      imdbVotes(0), metascore(0), ratingRT(0.0)
+{
+    // ista validacija godine kao u postojećem konstruktoru
+    if (godina < 1888 || godina > 2026)
+        this->godina = 2026;
     else
         this->godina = godina;
 }
@@ -73,6 +91,46 @@ int Film::GetGodina()           { return godina; }
 int Film::GetTrajanje()         { return trajanje; }
 AnsiString Film::GetOpis()      { return opis; }
 TBytes Film::GetPoster()        { return poster; }
+
+
+
+// --- dodani getteri ---
+AnsiString Film::GetImdbID()     { return imdbID; }
+AnsiString Film::GetRated()      { return rated; }
+AnsiString Film::GetReleased()   { return released; }
+AnsiString Film::GetZanr()       { return zanr; }
+AnsiString Film::GetRedatelj()   { return redatelj; }
+AnsiString Film::GetScenarist()  { return scenarist; }
+AnsiString Film::GetGlumci()     { return glumci; }
+AnsiString Film::GetJezik()      { return jezik; }
+AnsiString Film::GetDrzava()     { return drzava; }
+AnsiString Film::GetNagrade()    { return nagrade; }
+AnsiString Film::GetPosterUrl()  { return posterUrl; }
+AnsiString Film::GetTip()        { return tip; }
+AnsiString Film::GetBoxOffice()  { return boxOffice; }
+double     Film::GetImdbRating() { return imdbRating; }
+int        Film::GetImdbVotes()  { return imdbVotes; }
+int        Film::GetMetascore()  { return metascore; }
+double     Film::GetRatingRT()   { return ratingRT; }
+
+// --- dodani setteri ---
+void Film::SetImdbID(AnsiString v)     { imdbID = v; }
+void Film::SetRated(AnsiString v)      { rated = v; }
+void Film::SetReleased(AnsiString v)   { released = v; }
+void Film::SetZanr(AnsiString v)       { zanr = v; }
+void Film::SetRedatelj(AnsiString v)   { redatelj = v; }
+void Film::SetScenarist(AnsiString v)  { scenarist = v; }
+void Film::SetGlumci(AnsiString v)     { glumci = v; }
+void Film::SetJezik(AnsiString v)      { jezik = v; }
+void Film::SetDrzava(AnsiString v)     { drzava = v; }
+void Film::SetNagrade(AnsiString v)    { nagrade = v; }
+void Film::SetPosterUrl(AnsiString v)  { posterUrl = v; }
+void Film::SetTip(AnsiString v)        { tip = v; }
+void Film::SetBoxOffice(AnsiString v)  { boxOffice = v; }
+void Film::SetImdbRating(double v)     { imdbRating = v; }
+void Film::SetImdbVotes(int v)         { imdbVotes = v; }
+void Film::SetMetascore(int v)         { metascore = v; }
+void Film::SetRatingRT(double v)       { ratingRT = v; }
 
 float Film::izracunajOcjenu() {
     // dohvati sve recenzije za ovaj film iz baze i izračunaj prosjek

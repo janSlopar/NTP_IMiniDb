@@ -14,6 +14,31 @@
 #include <Xml.XMLIntf.hpp>
 #include <Xml.XMLDoc.hpp>
 #include <Xml.XMLIntf.hpp>
+#include <Data.DB.hpp>
+#include <Vcl.DBGrids.hpp>
+#include <Vcl.Grids.hpp>
+#include <FireDAC.Comp.Client.hpp>
+#include <FireDAC.Phys.hpp>
+#include <FireDAC.Phys.Intf.hpp>
+#include <FireDAC.Stan.Async.hpp>
+#include <FireDAC.Stan.Def.hpp>
+#include <FireDAC.Stan.Error.hpp>
+#include <FireDAC.Stan.Intf.hpp>
+#include <FireDAC.Stan.Option.hpp>
+#include <FireDAC.Stan.Pool.hpp>
+#include <FireDAC.UI.Intf.hpp>
+#include <FireDAC.VCLUI.Wait.hpp>
+#include <FireDAC.Phys.MySQL.hpp>
+#include <FireDAC.Phys.MySQLDef.hpp>
+#include <FireDAC.Comp.DataSet.hpp>
+#include <FireDAC.DApt.hpp>
+#include <FireDAC.DApt.Intf.hpp>
+#include <FireDAC.DatS.hpp>
+#include <FireDAC.Stan.Param.hpp>
+#include <Data.Bind.Components.hpp>
+#include <Data.Bind.ObjectScope.hpp>
+#include <REST.Client.hpp>
+#include <REST.Types.hpp>
 //---------------------------------------------------------------------------
 class TFormSviFilmovi : public TForm
 {
@@ -40,6 +65,19 @@ __published:	// IDE-managed Components
 	TLabel *LabelOmiljeniFilmoviNaslov;
 	TLabel *LabelListaZaGledanje;
 	TButton *Button1;
+	TButton *ButtonRESTBaza;
+	TDBGrid *DBGridFilmoviBaza;
+	TFDConnection *FDConnectionZaFilmove;
+	TFDPhysMySQLDriverLink *FDPhysMySQLDriverLink1;
+	TFDTable *FDTableFilm;
+	TDataSource *DataSourceFilm;
+	TFDQuery *FDQuerySelect;
+	TFDQuery *FDQueryInsert;
+	TRESTClient *RESTClient1;
+	TRESTRequest *RESTRequest1;
+	TRESTResponse *RESTResponse1;
+	TLabel *Label2;
+	TEdit *editFilmRESTBaza;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall ButtonOmiljeniFilmoviClick(TObject *Sender);
 	void __fastcall ButtonHRVClick(TObject *Sender);
@@ -51,6 +89,7 @@ __published:	// IDE-managed Components
 	void __fastcall ButtonDodajWatchlistuClick(TObject *Sender);
 	void __fastcall ButtonPregledajListuClick(TObject *Sender);
 	void __fastcall listViewOFilmoviSelectItem(TObject *Sender, TListItem *Item, bool Selected);
+	void __fastcall ButtonRESTBazaClick(TObject *Sender);
 
 private:	// User declarations
 public:		// User declarations

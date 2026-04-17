@@ -14,13 +14,17 @@ CREATE TABLE korisnik (
 
 SELECT * FROM korisnik
 
+-- FDQuerySelect 
+SELECT naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbRating,imdbVotes FROM Filmovi
+
+
 INSERT INTO korisnik(ime,prezime,korisnicko_ime,email,lozinka_hash)
 VALUES ("jan", "slopar", "slopy_", "js@gmail.com", "lozinkahash")
 
 -- =========================
 -- ADMIN (nasljeđuje korisnika)
 -- =========================
-CREATE TABLE `admin` (
+CREATE TABLE ADMIN (
     korisnik_id INT PRIMARY KEY,
     razina INT,
     odjel VARCHAR(100),
@@ -29,13 +33,30 @@ CREATE TABLE `admin` (
 -- =========================
 -- FILM
 -- =========================
-CREATE TABLE film (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    naslov VARCHAR(255) NOT NULL,
-    godina INT,
-    trajanje INT,
-    opis TEXT,
-    poster LONGBLOB
+
+CREATE TABLE Filmovi (
+    id           INT AUTO_INCREMENT PRIMARY KEY,
+    imdbID       VARCHAR(20) UNIQUE,
+    naslov       VARCHAR(255),
+    godina       INT,
+    trajanje     INT,
+    opis         TEXT,
+    zanr         VARCHAR(255),
+    redatelj     VARCHAR(255),
+    scenarist    TEXT,
+    glumci       TEXT,
+    jezik        VARCHAR(255),
+    drzava       VARCHAR(255),
+    nagrade      TEXT,
+    posterUrl    VARCHAR(500),
+    rated        VARCHAR(20),
+    `released`   VARCHAR(30),
+    tip          VARCHAR(20),
+    boxOffice    VARCHAR(30),
+    imdbRating   DOUBLE,
+    imdbVotes    INT,
+    metascore    INT,
+    ratingRT     DOUBLE
 );
 
 -- =========================
@@ -64,13 +85,3 @@ CREATE TABLE watchlista (
     FOREIGN KEY (korisnik_id) REFERENCES korisnik(id) ON DELETE CASCADE
 );
 
--- =========================
--- WATCHLISTA_FILMOVI (M:N)
--- =========================
-CREATE TABLE watchlista_film (
-    watchlista_id INT,
-    film_id INT,
-    PRIMARY KEY (watchlista_id, film_id),
-    FOREIGN KEY (watchlista_id) REFERENCES watchlista(id) ON DELETE CASCADE,
-    FOREIGN KEY (film_id) REFERENCES film(id) ON DELETE CASCADE
-);

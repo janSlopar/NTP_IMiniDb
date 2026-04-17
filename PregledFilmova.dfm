@@ -26,10 +26,10 @@ object FormSviFilmovi: TFormSviFilmovi
     Caption = 'Godina:'
   end
   object Image1: TImage
-    Left = 871
-    Top = 504
-    Width = 386
-    Height = 497
+    Left = 864
+    Top = 559
+    Width = 393
+    Height = 442
   end
   object Label8: TLabel
     Left = 814
@@ -64,6 +64,13 @@ object FormSviFilmovi: TFormSviFilmovi
     Width = 86
     Height = 15
     Caption = 'Lista za gledanje'
+  end
+  object Label2: TLabel
+    Left = 136
+    Top = 524
+    Width = 23
+    Height = 15
+    Caption = 'Film'
   end
   object ButtonDodajWatchlistu: TButton
     Left = 1104
@@ -189,9 +196,99 @@ object FormSviFilmovi: TFormSviFilmovi
     Caption = 'Recenzije'
     TabOrder = 12
   end
+  object ButtonRESTBaza: TButton
+    Left = 336
+    Top = 512
+    Width = 129
+    Height = 41
+    Caption = 'Dodaj u bazu'
+    TabOrder = 13
+    OnClick = ButtonRESTBazaClick
+  end
+  object editFilmRESTBaza: TEdit
+    Left = 176
+    Top = 512
+    Width = 154
+    Height = 23
+    TabOrder = 14
+    Text = 'editFilmRESTBaza'
+  end
+  object DBGridFilmoviBaza: TDBGrid
+    Left = -7
+    Top = 559
+    Width = 870
+    Height = 433
+    DataSource = DataSourceFilm
+    TabOrder = 15
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -12
+    TitleFont.Name = 'Segoe UI'
+    TitleFont.Style = []
+  end
   object XMLDocumentOmiljeniFilmovi: TXMLDocument
     FileName = 'C:\Users\Jan\Desktop\4sem\NTP\omiljeniFilmovi.xml'
     Left = 304
     Top = 248
+  end
+  object FDConnectionZaFilmove: TFDConnection
+    Params.Strings = (
+      'User_Name=root'
+      'Database=iminidb'
+      'Password=admin'
+      'DriverID=MySQL')
+    Connected = True
+    LoginPrompt = False
+    Left = 112
+    Top = 640
+  end
+  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
+    VendorLib = 'C:\Users\Jan\Desktop\4sem\NTP\libmysql.dll'
+    Left = 112
+    Top = 704
+  end
+  object FDTableFilm: TFDTable
+    Connection = FDConnectionZaFilmove
+    TableName = 'iminidb.filmovi'
+    Left = 112
+    Top = 768
+  end
+  object DataSourceFilm: TDataSource
+    DataSet = FDQuerySelect
+    Left = 112
+    Top = 824
+  end
+  object FDQuerySelect: TFDQuery
+    Active = True
+    Connection = FDConnectionZaFilmove
+    SQL.Strings = (
+      
+        'Select naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbR' +
+        'ating,imdbVotes from Filmovi')
+    Left = 288
+    Top = 640
+  end
+  object FDQueryInsert: TFDQuery
+    Connection = FDConnectionZaFilmove
+    Left = 288
+    Top = 704
+  end
+  object RESTClient1: TRESTClient
+    Params = <>
+    SynchronizedEvents = False
+    Left = 440
+    Top = 784
+  end
+  object RESTRequest1: TRESTRequest
+    Client = RESTClient1
+    Params = <>
+    Response = RESTResponse1
+    SynchronizedEvents = False
+    Left = 432
+    Top = 632
+  end
+  object RESTResponse1: TRESTResponse
+    Left = 440
+    Top = 712
   end
 end
