@@ -72,6 +72,22 @@ void __fastcall TFormSviFilmovi::OcistiPolja()
     EditNovoTrajanje->Text = "";
     MemoOpisNovogFilma->Text = "";
 }
+
+void __fastcall TFormSviFilmovi::SirinaDBGrida(){
+
+    if (DBGridFilmoviBaza->Columns->Count > 0) {
+        DBGridFilmoviBaza->Columns->Items[0]->Width  = 200;  // Naslov
+        DBGridFilmoviBaza->Columns->Items[1]->Width  = 60;   // Godina
+        DBGridFilmoviBaza->Columns->Items[2]->Width  = 80;   // Trajanje
+        DBGridFilmoviBaza->Columns->Items[3]->Width  = 150;  // Zanr
+        DBGridFilmoviBaza->Columns->Items[4]->Width  = 150;  // Redatelj
+        DBGridFilmoviBaza->Columns->Items[5]->Width  = 250;  // Glumci
+        DBGridFilmoviBaza->Columns->Items[6]->Width  = 80;   // IMDb ocjena
+        DBGridFilmoviBaza->Columns->Items[7]->Width  = 80;   // Metascore
+        DBGridFilmoviBaza->Columns->Items[8]->Width  = 100;  // Rotten Tomatoes
+
+    }
+}
 //---------------------------------------------------------------------------
 void __fastcall TFormSviFilmovi::FormCreate(TObject *Sender)
 {
@@ -131,19 +147,7 @@ void __fastcall TFormSviFilmovi::FormCreate(TObject *Sender)
 	LabelListaZaGledanje->Font->Color = (TColor)0x00FFD700;
 	LabelListaZaGledanje->Alignment   = taCenter;
 	LabelListaZaGledanje->Transparent = true;
-
-    if (DBGridFilmoviBaza->Columns->Count > 0) {
-        DBGridFilmoviBaza->Columns->Items[0]->Width  = 200;  // Naslov
-        DBGridFilmoviBaza->Columns->Items[1]->Width  = 60;   // Godina
-        DBGridFilmoviBaza->Columns->Items[2]->Width  = 80;   // Trajanje
-        DBGridFilmoviBaza->Columns->Items[3]->Width  = 150;  // Zanr
-        DBGridFilmoviBaza->Columns->Items[4]->Width  = 150;  // Redatelj
-        DBGridFilmoviBaza->Columns->Items[5]->Width  = 250;  // Glumci
-        DBGridFilmoviBaza->Columns->Items[6]->Width  = 80;   // IMDb ocjena
-        DBGridFilmoviBaza->Columns->Items[7]->Width  = 80;   // Metascore
-        DBGridFilmoviBaza->Columns->Items[8]->Width  = 100;  // Rotten Tomatoes
-
-    }
+    SirinaDBGrida();
 }
 //---------------------------------------------------------------------------
 
@@ -411,6 +415,7 @@ void __fastcall TFormSviFilmovi::listViewOFilmoviSelectItem(TObject *Sender, TLi
 
 void __fastcall TFormSviFilmovi::ButtonRESTBazaClick(TObject *Sender)
 {
+    DataSourceFilm->DataSet = FDQuerySelect;
     AnsiString pojam = Trim(editFilmRESTBaza->Text);
     if (pojam.IsEmpty()) { ShowMessage("Upisi pojam."); return; }
 
@@ -561,12 +566,68 @@ void __fastcall TFormSviFilmovi::ButtonRESTBazaClick(TObject *Sender)
         Sleep(100);
     }
 
-    delete jo;
+	delete jo;
+
 
     FDTableFilm->Close();
 	FDTableFilm->Open();
-
+    SirinaDBGrida();
     ShowMessage("Upisano: " + IntToStr(upisano));
+}
+
+
+void __fastcall TFormSviFilmovi::SpremiPosterUBazu(String url)
+{
+    TNetHTTPClient *http = new TNetHTTPClient(NULL);
+    std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
+
+    http->Get(url, ms.get());
+
+    FDTableFilm->Edit();
+
+    TBlobField *blob = (TBlobField*)FDTableFilm->FieldByName("Poster");
+    blob->LoadFromStream(ms.get());
+
+    FDTableFilm->Post();
+
+    delete http;
+}
+
+void __fastcall TFormSviFilmovi::PrikaziPoster()
+{
+    TBlobField *blobField = (TBlobField*)FDTableFilm->FieldByName("Poster");
+
+    if (blobField->IsNull()) {
+        Image1->Picture->Assign(NULL);
+        return;
+    }
+
+    std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
+    blobField->SaveToStream(ms.get());
+    ms->Position = 0;
+
+    Image1->Picture->LoadFromStream(ms.get());
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TFormSviFilmovi::ToolButtonSQLSortClick(TObject *Sender)
+{
+    FDQuerySortGodina->Close();
+	FDQuerySortGodina->Open();
+
+	DataSourceFilm->DataSet = FDQuerySortGodina;
+	SirinaDBGrida();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TFormSviFilmovi::ToolButtonSQLFilterClick(TObject *Sender)
+{
+    FDQueryFilterOcjena->Close();
+	FDQueryFilterOcjena->Open();
+
+	DataSourceFilm->DataSet = FDQueryFilterOcjena;
+	SirinaDBGrida();
 }
 //---------------------------------------------------------------------------
 

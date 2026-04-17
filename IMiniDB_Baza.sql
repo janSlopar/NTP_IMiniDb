@@ -13,10 +13,22 @@ CREATE TABLE korisnik (
 );
 
 SELECT * FROM korisnik
+SELECT * FROM Filmovi
+ALTER TABLE Filmovi ADD COLUMN poster MEDIUMBLOB;
 
 -- FDQuerySelect 
 SELECT naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbRating,imdbVotes FROM Filmovi
 
+-- FDQuerySortGodina
+SELECT naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbRating,imdbVotes 
+FROM Filmovi
+ORDER BY godina ASC
+
+-- FDQueryFilterOcjena
+SELECT naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbRating,imdbVotes 
+FROM Filmovi
+WHERE imdbRating >= 8
+ORDER BY imdbRating DESC
 
 INSERT INTO korisnik(ime,prezime,korisnicko_ime,email,lozinka_hash)
 VALUES ("jan", "slopar", "slopy_", "js@gmail.com", "lozinkahash")

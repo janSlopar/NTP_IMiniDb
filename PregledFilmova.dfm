@@ -66,7 +66,7 @@ object FormSviFilmovi: TFormSviFilmovi
     Caption = 'Lista za gledanje'
   end
   object Label2: TLabel
-    Left = 136
+    Left = 8
     Top = 524
     Width = 23
     Height = 15
@@ -197,7 +197,7 @@ object FormSviFilmovi: TFormSviFilmovi
     TabOrder = 12
   end
   object ButtonRESTBaza: TButton
-    Left = 336
+    Left = 197
     Top = 512
     Width = 129
     Height = 41
@@ -206,8 +206,8 @@ object FormSviFilmovi: TFormSviFilmovi
     OnClick = ButtonRESTBazaClick
   end
   object editFilmRESTBaza: TEdit
-    Left = 176
-    Top = 512
+    Left = 37
+    Top = 521
     Width = 154
     Height = 23
     TabOrder = 14
@@ -225,6 +225,32 @@ object FormSviFilmovi: TFormSviFilmovi
     TitleFont.Height = -12
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
+  end
+  object ToolBar1: TToolBar
+    Left = 332
+    Top = 512
+    Width = 917
+    Height = 41
+    Align = alCustom
+    ButtonHeight = 23
+    ButtonWidth = 61
+    Caption = 'ToolBar1'
+    ShowCaptions = True
+    TabOrder = 16
+    object ToolButtonSQLSort: TToolButton
+      Left = 0
+      Top = 0
+      Caption = 'Sortiraj'
+      ImageIndex = 0
+      OnClick = ToolButtonSQLSortClick
+    end
+    object ToolButtonSQLFilter: TToolButton
+      Left = 61
+      Top = 0
+      Caption = 'Preporuka'
+      ImageIndex = 1
+      OnClick = ToolButtonSQLFilterClick
+    end
   end
   object XMLDocumentOmiljeniFilmovi: TXMLDocument
     FileName = 'C:\Users\Jan\Desktop\4sem\NTP\omiljeniFilmovi.xml'
@@ -290,5 +316,29 @@ object FormSviFilmovi: TFormSviFilmovi
   object RESTResponse1: TRESTResponse
     Left = 440
     Top = 712
+  end
+  object FDQuerySortGodina: TFDQuery
+    Connection = FDConnectionZaFilmove
+    SQL.Strings = (
+      
+        'SELECT naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbR' +
+        'ating,imdbVotes '
+      'FROM Filmovi'
+      'WHERE godina IS NOT NULL'
+      'ORDER BY godina DESC')
+    Left = 288
+    Top = 784
+  end
+  object FDQueryFilterOcjena: TFDQuery
+    Connection = FDConnectionZaFilmove
+    SQL.Strings = (
+      
+        'SELECT naslov,godina,imdbRating,trajanje,opis,zanr,redatelj,boxO' +
+        'ffice,imdbVotes '
+      'FROM Filmovi'
+      'where imdbRating >= 8'
+      'order by imdbRating desc')
+    Left = 288
+    Top = 856
   end
 end

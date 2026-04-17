@@ -39,6 +39,11 @@
 #include <Data.Bind.ObjectScope.hpp>
 #include <REST.Client.hpp>
 #include <REST.Types.hpp>
+#include <Data.FMTBcd.hpp>
+#include <Data.SqlExpr.hpp>
+#include <Vcl.ActnCtrls.hpp>
+#include <Vcl.ActnMan.hpp>
+#include <Vcl.ToolWin.hpp>
 //---------------------------------------------------------------------------
 class TFormSviFilmovi : public TForm
 {
@@ -78,6 +83,11 @@ __published:	// IDE-managed Components
 	TRESTResponse *RESTResponse1;
 	TLabel *Label2;
 	TEdit *editFilmRESTBaza;
+	TFDQuery *FDQuerySortGodina;
+	TFDQuery *FDQueryFilterOcjena;
+	TToolBar *ToolBar1;
+	TToolButton *ToolButtonSQLSort;
+	TToolButton *ToolButtonSQLFilter;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall ButtonOmiljeniFilmoviClick(TObject *Sender);
 	void __fastcall ButtonHRVClick(TObject *Sender);
@@ -90,6 +100,11 @@ __published:	// IDE-managed Components
 	void __fastcall ButtonPregledajListuClick(TObject *Sender);
 	void __fastcall listViewOFilmoviSelectItem(TObject *Sender, TListItem *Item, bool Selected);
 	void __fastcall ButtonRESTBazaClick(TObject *Sender);
+	void __fastcall SirinaDBGrida();
+	void __fastcall ToolButtonSQLSortClick(TObject *Sender);
+	void __fastcall ToolButtonSQLFilterClick(TObject *Sender);
+	void __fastcall PrikaziPoster();
+    void __fastcall SpremiPosterUBazu(String url);
 
 private:	// User declarations
 public:		// User declarations
