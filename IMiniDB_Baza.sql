@@ -15,9 +15,11 @@ CREATE TABLE korisnik (
 SELECT * FROM korisnik
 SELECT * FROM Filmovi
 ALTER TABLE Filmovi ADD COLUMN poster MEDIUMBLOB;
+UPDATE Filmovi SET poster = NULL;
 
 -- FDQuerySelect 
 SELECT naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbRating,imdbVotes FROM Filmovi
+SELECT poster FROM Filmovi
 
 -- FDQuerySortGodina
 SELECT naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbRating,imdbVotes 

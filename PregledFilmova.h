@@ -44,6 +44,8 @@
 #include <Vcl.ActnCtrls.hpp>
 #include <Vcl.ActnMan.hpp>
 #include <Vcl.ToolWin.hpp>
+#include <Vcl.Dialogs.hpp>
+#include <Vcl.DBCtrls.hpp>
 //---------------------------------------------------------------------------
 class TFormSviFilmovi : public TForm
 {
@@ -55,7 +57,6 @@ __published:	// IDE-managed Components
 	TLabel *Label7;
 	TButton *ButtonOmiljeniFilmovi;
 	TListView *listViewOFilmovi;
-	TImage *Image1;
 	TButton *ButtonHRV;
 	TButton *ButtonENG;
 	TXMLDocument *XMLDocumentOmiljeniFilmovi;
@@ -88,6 +89,7 @@ __published:	// IDE-managed Components
 	TToolBar *ToolBar1;
 	TToolButton *ToolButtonSQLSort;
 	TToolButton *ToolButtonSQLFilter;
+	TDBImage *DBImage1;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall ButtonOmiljeniFilmoviClick(TObject *Sender);
 	void __fastcall ButtonHRVClick(TObject *Sender);
@@ -104,13 +106,22 @@ __published:	// IDE-managed Components
 	void __fastcall ToolButtonSQLSortClick(TObject *Sender);
 	void __fastcall ToolButtonSQLFilterClick(TObject *Sender);
 	void __fastcall PrikaziPoster();
-    void __fastcall SpremiPosterUBazu(String url);
+	void __fastcall SpremiPosterUBazu();
+	void __fastcall DBGridFilmoviBazaCellClick(TColumn *Column);
+bool __fastcall PosterPostojiUBazi(const String &imdbID);
+void __fastcall OsvjeziTablicutomZapisu();
+    private:	// User declarations
 
-private:	// User declarations
 public:		// User declarations
+
 	__fastcall TFormSviFilmovi(TComponent* Owner);
+
 };
+
 //---------------------------------------------------------------------------
+
 extern PACKAGE TFormSviFilmovi *FormSviFilmovi;
+
 //---------------------------------------------------------------------------
+
 #endif

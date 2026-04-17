@@ -14,6 +14,14 @@
 #include <System.JSON.hpp>
 #include <REST.Types.hpp>
 #include <System.IOUtils.hpp>
+
+#include <System.Net.HttpClient.hpp>
+#include <System.Net.HttpClientComponent.hpp>
+#include <Vcl.Imaging.jpeg.hpp>
+#include <Vcl.Imaging.pngimage.hpp>
+#include <memory>
+#include <jpeg.hpp>
+#include <pngimage.hpp>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -73,20 +81,17 @@ void __fastcall TFormSviFilmovi::OcistiPolja()
     MemoOpisNovogFilma->Text = "";
 }
 
-void __fastcall TFormSviFilmovi::SirinaDBGrida(){
+void __fastcall TFormSviFilmovi::SirinaDBGrida()
+{
+    int sirine[] = { 200, 60, 80, 150, 150, 250, 80, 80, 100 };
+    int brojSirina = sizeof(sirine) / sizeof(sirine[0]);
 
-    if (DBGridFilmoviBaza->Columns->Count > 0) {
-        DBGridFilmoviBaza->Columns->Items[0]->Width  = 200;  // Naslov
-        DBGridFilmoviBaza->Columns->Items[1]->Width  = 60;   // Godina
-        DBGridFilmoviBaza->Columns->Items[2]->Width  = 80;   // Trajanje
-        DBGridFilmoviBaza->Columns->Items[3]->Width  = 150;  // Zanr
-        DBGridFilmoviBaza->Columns->Items[4]->Width  = 150;  // Redatelj
-        DBGridFilmoviBaza->Columns->Items[5]->Width  = 250;  // Glumci
-        DBGridFilmoviBaza->Columns->Items[6]->Width  = 80;   // IMDb ocjena
-        DBGridFilmoviBaza->Columns->Items[7]->Width  = 80;   // Metascore
-        DBGridFilmoviBaza->Columns->Items[8]->Width  = 100;  // Rotten Tomatoes
+    int maxCols = DBGridFilmoviBaza->Columns->Count;
+    if (maxCols > brojSirina) maxCols = brojSirina;
 
-    }
+    for (int i = 0; i < maxCols; i++)
+		DBGridFilmoviBaza->Columns->Items[i]->Width = sirine[i];
+
 }
 //---------------------------------------------------------------------------
 void __fastcall TFormSviFilmovi::FormCreate(TObject *Sender)
@@ -147,6 +152,7 @@ void __fastcall TFormSviFilmovi::FormCreate(TObject *Sender)
 	LabelListaZaGledanje->Font->Color = (TColor)0x00FFD700;
 	LabelListaZaGledanje->Alignment   = taCenter;
 	LabelListaZaGledanje->Transparent = true;
+
     SirinaDBGrida();
 }
 //---------------------------------------------------------------------------
@@ -569,44 +575,151 @@ void __fastcall TFormSviFilmovi::ButtonRESTBazaClick(TObject *Sender)
 	delete jo;
 
 
-    FDTableFilm->Close();
+	FDTableFilm->Close();
 	FDTableFilm->Open();
-    SirinaDBGrida();
-    ShowMessage("Upisano: " + IntToStr(upisano));
+	SirinaDBGrida();
+	ShowMessage("Upisano: " + IntToStr(upisano));
 }
 
 
-void __fastcall TFormSviFilmovi::SpremiPosterUBazu(String url)
+
+
+//---------------------------------------------------------------------------
+// Pomoćna funkcija: provjerava je li poster već spremljen u bazu
+bool __fastcall TFormSviFilmovi::PosterPostojiUBazi(const String &imdbID)
 {
-    TNetHTTPClient *http = new TNetHTTPClient(NULL);
-    std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
+    bool postoji = false;
+    TFDQuery *q = new TFDQuery(NULL);
+    try {
+        q->Connection = FDTableFilm->Connection;
+        q->SQL->Text = "SELECT LENGTH(poster) AS vel FROM Filmovi WHERE imdbID = :id";
+        q->ParamByName("id")->AsString = imdbID;
+        q->Open();
 
-    http->Get(url, ms.get());
-
-    FDTableFilm->Edit();
-
-    TBlobField *blob = (TBlobField*)FDTableFilm->FieldByName("Poster");
-    blob->LoadFromStream(ms.get());
-
-    FDTableFilm->Post();
-
-    delete http;
+        if (!q->IsEmpty() && !q->FieldByName("vel")->IsNull)
+            postoji = q->FieldByName("vel")->AsInteger > 1000;
+    }
+    __finally {
+        delete q;
+    }
+    return postoji;
 }
 
-void __fastcall TFormSviFilmovi::PrikaziPoster()
+// Pomoćna funkcija: refresh tablice uz zadržavanje trenutnog zapisa
+void __fastcall TFormSviFilmovi::OsvjeziTablicutomZapisu()
 {
-    TBlobField *blobField = (TBlobField*)FDTableFilm->FieldByName("Poster");
+    TBookmark bm = FDTableFilm->GetBookmark();
+    FDTableFilm->DisableControls();
+    try {
+        FDTableFilm->Close();
+        FDTableFilm->Open();
+        FDTableFilm->GotoBookmark(bm);
+    }
+    __finally {
+        FDTableFilm->FreeBookmark(bm);
+        FDTableFilm->EnableControls();
+    }
+}
 
-    if (blobField->IsNull()) {
-        Image1->Picture->Assign(NULL);
+// Preuzima poster s URL-a i sprema u bazu kao blob
+void __fastcall TFormSviFilmovi::SpremiPosterUBazu()
+{
+    String url = FDTableFilm->FieldByName("posterUrl")->AsString.Trim();
+    if (url.IsEmpty() || url == "N/A") {
+        ShowMessage("URL postera je prazan.");
         return;
     }
 
-    std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
-    blobField->SaveToStream(ms.get());
-    ms->Position = 0;
+    String imdbID = FDTableFilm->FieldByName("imdbID")->AsString;
 
-    Image1->Picture->LoadFromStream(ms.get());
+    std::unique_ptr<TNetHTTPClient> http(new TNetHTTPClient(NULL));
+    std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
+
+    try {
+        http->UserAgent = "Mozilla/5.0";
+        http->HandleRedirects = true;
+        http->Accept = "image/*";
+
+        _di_IHTTPResponse response = http->Get(url, ms.get());
+
+        if (response->StatusCode != 200 || ms->Size < 1000) {
+            ShowMessage("Greška pri dohvatu slike.");
+            return;
+        }
+
+        ms->Position = 0;
+
+        // UPDATE preko zasebnog querya - pouzdanije od FDTable->Edit/Post za blobove
+        TFDQuery *q = new TFDQuery(NULL);
+        try {
+            q->Connection = FDTableFilm->Connection;
+            q->SQL->Text = "UPDATE Filmovi SET poster = :blob WHERE imdbID = :id";
+            q->ParamByName("blob")->DataType = ftBlob;
+            q->ParamByName("blob")->LoadFromStream(ms.get(), ftBlob);
+            q->ParamByName("id")->AsString = imdbID;
+            q->ExecSQL();
+        }
+        __finally {
+            delete q;
+        }
+    }
+    catch (Exception &e) {
+        ShowMessage("Greška: " + e.Message);
+    }
+}
+
+// Prikazuje poster za trenutni film u DBImage1
+void __fastcall TFormSviFilmovi::PrikaziPoster()
+{
+    DBImage1->Picture->Assign(NULL);
+
+    if (FDTableFilm->IsEmpty())
+        return;
+
+    String imdbID = FDTableFilm->FieldByName("imdbID")->AsString;
+
+    TFDQuery *q = new TFDQuery(NULL);
+    try {
+        q->Connection = FDTableFilm->Connection;
+        q->SQL->Text = "SELECT poster FROM Filmovi WHERE imdbID = :id";
+        q->ParamByName("id")->AsString = imdbID;
+        q->Open();
+
+        if (q->IsEmpty())
+            return;
+
+        TBlobField *blob = (TBlobField*)q->FieldByName("poster");
+        if (blob->IsNull || blob->DataSize == 0)
+            return;
+
+        std::unique_ptr<TMemoryStream> ms(new TMemoryStream());
+        blob->SaveToStream(ms.get());
+        ms->Position = 0;
+
+        std::unique_ptr<TWICImage> img(new TWICImage());
+        img->LoadFromStream(ms.get());
+        DBImage1->Picture->Assign(img.get());
+    }
+    __finally {
+        delete q;
+    }
+}
+
+//---------------------------------------------------------------------------
+// DBGrid event
+//---------------------------------------------------------------------------
+
+void __fastcall TFormSviFilmovi::DBGridFilmoviBazaCellClick(TColumn *Column)
+{
+    if (FDTableFilm->IsEmpty())
+        return;
+
+    String imdbID = FDTableFilm->FieldByName("imdbID")->AsString;
+
+    if (!PosterPostojiUBazi(imdbID)) {
+        SpremiPosterUBazu();
+		OsvjeziTablicutomZapisu();
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -629,5 +742,3 @@ void __fastcall TFormSviFilmovi::ToolButtonSQLFilterClick(TObject *Sender)
 	DataSourceFilm->DataSet = FDQueryFilterOcjena;
 	SirinaDBGrida();
 }
-//---------------------------------------------------------------------------
-

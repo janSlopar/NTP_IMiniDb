@@ -25,12 +25,6 @@ object FormSviFilmovi: TFormSviFilmovi
     Height = 15
     Caption = 'Godina:'
   end
-  object Image1: TImage
-    Left = 864
-    Top = 559
-    Width = 393
-    Height = 442
-  end
   object Label8: TLabel
     Left = 814
     Top = 213
@@ -214,7 +208,7 @@ object FormSviFilmovi: TFormSviFilmovi
     Text = 'editFilmRESTBaza'
   end
   object DBGridFilmoviBaza: TDBGrid
-    Left = -7
+    Left = -12
     Top = 559
     Width = 870
     Height = 433
@@ -225,6 +219,7 @@ object FormSviFilmovi: TFormSviFilmovi
     TitleFont.Height = -12
     TitleFont.Name = 'Segoe UI'
     TitleFont.Style = []
+    OnCellClick = DBGridFilmoviBazaCellClick
   end
   object ToolBar1: TToolBar
     Left = 332
@@ -252,6 +247,17 @@ object FormSviFilmovi: TFormSviFilmovi
       OnClick = ToolButtonSQLFilterClick
     end
   end
+  object DBImage1: TDBImage
+    Left = 864
+    Top = 559
+    Width = 385
+    Height = 433
+    DataField = 'poster'
+    DataSource = DataSourceFilm
+    Proportional = True
+    Stretch = True
+    TabOrder = 17
+  end
   object XMLDocumentOmiljeniFilmovi: TXMLDocument
     FileName = 'C:\Users\Jan\Desktop\4sem\NTP\omiljeniFilmovi.xml'
     Left = 304
@@ -274,13 +280,17 @@ object FormSviFilmovi: TFormSviFilmovi
     Top = 704
   end
   object FDTableFilm: TFDTable
+    Active = True
+    IndexFieldNames = 'id'
     Connection = FDConnectionZaFilmove
+    FetchOptions.AssignedValues = [evItems]
+    ResourceOptions.AssignedValues = [rvEscapeExpand]
     TableName = 'iminidb.filmovi'
     Left = 112
     Top = 768
   end
   object DataSourceFilm: TDataSource
-    DataSet = FDQuerySelect
+    DataSet = FDTableFilm
     Left = 112
     Top = 824
   end
@@ -289,8 +299,8 @@ object FormSviFilmovi: TFormSviFilmovi
     Connection = FDConnectionZaFilmove
     SQL.Strings = (
       
-        'Select naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbR' +
-        'ating,imdbVotes from Filmovi')
+        'SELECT naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbR' +
+        'ating,imdbVotes FROM Filmovi')
     Left = 288
     Top = 640
   end
@@ -318,11 +328,12 @@ object FormSviFilmovi: TFormSviFilmovi
     Top = 712
   end
   object FDQuerySortGodina: TFDQuery
+    Active = True
     Connection = FDConnectionZaFilmove
     SQL.Strings = (
       
         'SELECT naslov,godina,trajanje,opis,zanr,redatelj,boxOffice,imdbR' +
-        'ating,imdbVotes '
+        'ating,imdbVotes,poster'
       'FROM Filmovi'
       'WHERE godina IS NOT NULL'
       'ORDER BY godina DESC')
@@ -330,11 +341,12 @@ object FormSviFilmovi: TFormSviFilmovi
     Top = 784
   end
   object FDQueryFilterOcjena: TFDQuery
+    Active = True
     Connection = FDConnectionZaFilmove
     SQL.Strings = (
       
         'SELECT naslov,godina,imdbRating,trajanje,opis,zanr,redatelj,boxO' +
-        'ffice,imdbVotes '
+        'ffice,imdbVotes,poster '
       'FROM Filmovi'
       'where imdbRating >= 8'
       'order by imdbRating desc')
