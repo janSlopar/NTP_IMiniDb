@@ -12,6 +12,7 @@
 #pragma package(smart_init)
 #pragma link "frCoreClasses"
 #pragma link "frxClass"
+#pragma link "frxDBSet"
 #pragma resource "*.dfm"
 TFormRecenzija *FormRecenzija;
 
@@ -350,3 +351,11 @@ void __fastcall TFormRecenzija::ButtonSpremiRecenzijuClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TFormRecenzija::ButtonPDFClick(TObject *Sender)
+{
+	frxReportRecenzije->ShowReport();
+	PReportRecenzije->
+}
+//---------------------------------------------------------------------------
+

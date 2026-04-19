@@ -31,6 +31,7 @@
 #include <FireDAC.DApt.Intf.hpp>
 #include <FireDAC.DatS.hpp>
 #include <FireDAC.Stan.Param.hpp>
+#include "frxDBSet.hpp"
 //---------------------------------------------------------------------------
 class TFormRecenzija : public TForm
 {
@@ -62,6 +63,11 @@ __published:	// IDE-managed Components
 	TFDQuery *FDQueryUnosRecenzije;
 	TFDPhysMySQLDriverLink *FDPhysMySQLDriverLink1;
 	TFDTable *FDTableRecenzije;
+	TFDTable *FDTableKorisnik;
+	TfrxReport *frxReportRecenzije;
+	TfrxDBDataset *frxDBDatasetRecenzije;
+	TfrxDBDataset *frxDBDatasetKorisnik;
+	TPReport *PReportRecenzije;
 	void __fastcall ButtonSpremiRecenzijuClick(TObject *Sender);
 	void __fastcall ButtonOdustaniClick(TObject *Sender);
 	void __fastcall FormCreate(TObject *Sender);
@@ -69,6 +75,7 @@ __published:	// IDE-managed Components
 	void __fastcall UcitajRecenzijeUCombo();
 	void __fastcall SinkronizirajJSONuBazu();
     void __fastcall DohvatiRecenzijeIzBazeUJSON();
+	void __fastcall ButtonPDFClick(TObject *Sender);
 private:	// User declarations
     int editIndex;
 	void UcitajFilmoveUCombo();

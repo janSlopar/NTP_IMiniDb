@@ -1,16 +1,1 @@
-[
-  {
-    "id": 1,
-    "naslov": "Mad Max: Fury Road",
-    "tekst": "Najbolji akcijski film 21.st.!",
-    "ocjena": 9,
-    "datum": "2026-04-19"
-  },
-  {
-    "id": 2,
-    "naslov": "Interstellar",
-    "ocjena": 10,
-    "tekst": "Meni najdraži SF film 21.st.",
-    "datum": "2026-04-19"
-  }
-]
+[{"id":1,"naslov":"Mad Max: Fury Road","tekst":"Najbolji akcijski film 21.st.!","ocjena":9,"datum":"2026-04-19"},{"id":2,"naslov":"Interstellar","tekst":"Meni najdraži SF film 21.st.","ocjena":10,"datum":"2026-04-19"}]
