@@ -215,4 +215,34 @@ object FormRecenzija: TFormRecenzija
       MirrorMode = []
     end
   end
+  object FDConnectionIMiniDB: TFDConnection
+    Params.Strings = (
+      'Database=iminidb'
+      'User_Name=root'
+      'Password=admin'
+      'DriverID=MySQL')
+    Connected = True
+    LoginPrompt = False
+    Left = 1208
+    Top = 208
+  end
+  object FDQueryUnosRecenzije: TFDQuery
+    Connection = FDConnectionIMiniDB
+    Left = 1200
+    Top = 512
+  end
+  object FDPhysMySQLDriverLink1: TFDPhysMySQLDriverLink
+    VendorLib = 'C:\Users\Jan\Desktop\4sem\NTP\libmysql.dll'
+    Left = 1200
+    Top = 376
+  end
+  object FDTableRecenzije: TFDTable
+    Active = True
+    IndexFieldNames = 'id'
+    Connection = FDConnectionIMiniDB
+    ResourceOptions.AssignedValues = [rvEscapeExpand]
+    TableName = 'iminidb.recenzija'
+    Left = 1200
+    Top = 440
+  end
 end

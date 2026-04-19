@@ -40,6 +40,10 @@ FROM filmovi
 INSERT INTO korisnik(ime,prezime,korisnicko_ime,email,lozinka_hash)
 VALUES ("jan", "slopar", "slopy_", "js@gmail.com", "lozinkahash")
 
+SELECT * FROM recenzija
+
+ALTER TABLE recenzija ADD COLUMN naslov VARCHAR(255) NOT NULL AFTER id;
+
 -- =========================
 -- ADMIN (nasljeđuje korisnika)
 -- =========================
@@ -86,15 +90,14 @@ CREATE TABLE recenzija (
     tekst TEXT,
     ocjena INT CHECK (ocjena BETWEEN 1 AND 10),
     datum DATETIME DEFAULT CURRENT_TIMESTAMP,
-    film_id INT,
     korisnik_id INT,
-    FOREIGN KEY (film_id) REFERENCES film(id) ON DELETE CASCADE,
     FOREIGN KEY (korisnik_id) REFERENCES korisnik(id) ON DELETE CASCADE
 );
 
 -- =========================
 -- WATCHLISTA
 -- =========================
+/*
 CREATE TABLE watchlista (
     id INT AUTO_INCREMENT PRIMARY KEY,
     korisnik_id INT,
@@ -102,5 +105,5 @@ CREATE TABLE watchlista (
     javna BOOLEAN,
     datum_kreiranja DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (korisnik_id) REFERENCES korisnik(id) ON DELETE CASCADE
-);
+);*/
 

@@ -1,1 +1,16 @@
-[{"film":"Interstellar","ocjena":10,"tekst":"Odličan! Najbolji Film ikad!","datum":"2026-04-15"},{"film":"Shutter Island","ocjena":8,"tekst":"Sviđa mi se plot twist","datum":"2026-04-15"}]
+[
+  {
+    "id": 1,
+    "naslov": "Mad Max: Fury Road",
+    "tekst": "Najbolji akcijski film 21.st.!",
+    "ocjena": 9,
+    "datum": "2026-04-19"
+  },
+  {
+    "id": 2,
+    "naslov": "Interstellar",
+    "ocjena": 10,
+    "tekst": "Meni najdraži SF film 21.st.",
+    "datum": "2026-04-19"
+  }
+]

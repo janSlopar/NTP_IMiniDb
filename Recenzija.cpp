@@ -7,41 +7,24 @@
 #include "DataTypes.h"
 #include <registry.hpp>
 #include <System.IOUtils.hpp>
-#include <System.JSON.Readers.hpp>
-#include <System.JSON.Writers.hpp>
+#include <System.JSON.hpp>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "frCoreClasses"
 #pragma link "frxClass"
 #pragma resource "*.dfm"
 TFormRecenzija *FormRecenzija;
+
+static const int TRENUTNI_KORISNIK_ID = 1;
 //---------------------------------------------------------------------------
 __fastcall TFormRecenzija::TFormRecenzija(TComponent* Owner)
     : TForm(Owner), editIndex(-1)
 {
 }
 //---------------------------------------------------------------------------
-void TFormRecenzija::UcitajFilmoveUCombo()
+static String PutanjaJSON()
 {
-    cmbFilm->Items->Clear();
-    cmbFilm->Items->Add("---- Nova recenzija ----");
-
-    String putanja = TPath::Combine(ExtractFilePath(Application->ExeName), "..\\..\\recenzija.json");
-    if (!TFile::Exists(putanja)) return;
-
-    TStringList *sl = new TStringList();
-    sl->LoadFromFile(putanja, TEncoding::UTF8);
-    TJSONValue *root = TJSONObject::ParseJSONValue(sl->Text.Trim());
-    delete sl;
-
-    if (root && root->ClassNameIs("TJSONArray")) {
-        TJSONArray *arr = static_cast<TJSONArray*>(root);
-        for (int i = 0; i < arr->Count; i++) {
-            TJSONObject *obj = static_cast<TJSONObject*>(arr->Items[i]);
-            cmbFilm->Items->Add(obj->GetValue("film")->Value());
-        }
-        delete root;
-    }
+    return TPath::Combine(ExtractFilePath(Application->ExeName), "..\\..\\recenzija.json");
 }
 //---------------------------------------------------------------------------
 void __fastcall TFormRecenzija::FormCreate(TObject *Sender)
@@ -54,20 +37,222 @@ void __fastcall TFormRecenzija::FormCreate(TObject *Sender)
     GroupBoxRecenzija->StyleName = ini->ReadString("Stilovi", "stil2", "Obsidian");
     delete ini;
 
-    UcitajFilmoveUCombo();
+    DohvatiRecenzijeIzBazeUJSON();
+    UcitajRecenzijeUCombo();
     cmbFilm->ItemIndex = 0;
     editIndex = -1;
 }
 //---------------------------------------------------------------------------
+void __fastcall TFormRecenzija::UcitajRecenzijeUCombo()
+{
+    cmbFilm->Items->BeginUpdate();
+    try {
+        cmbFilm->Items->Clear();
+        cmbFilm->Items->AddObject("---- Nova recenzija ----", (TObject*)(NativeInt)(-1));
 
+        String putanja = PutanjaJSON();
+        if (!TFile::Exists(putanja)) return;
+
+        TStringList *sl = new TStringList();
+        sl->LoadFromFile(putanja, TEncoding::UTF8);
+        String sadrzaj = sl->Text.Trim();
+        delete sl;
+        if (sadrzaj.IsEmpty()) return;
+
+        TJSONValue *root = TJSONObject::ParseJSONValue(sadrzaj);
+        if (root && root->ClassNameIs("TJSONArray")) {
+            TJSONArray *arr = static_cast<TJSONArray*>(root);
+            for (int i = 0; i < arr->Count; i++) {
+                TJSONObject *obj = static_cast<TJSONObject*>(arr->Items[i]);
+
+				String naslov;
+				if (obj->GetValue("naslov")) naslov  = obj->GetValue("naslov")->Value();
+
+                String stavka = "  |  " + naslov + "  |  ";
+                cmbFilm->Items->AddObject(stavka, (TObject*)(NativeInt)i);
+            }
+        }
+        if (root) delete root;
+
+    } __finally {
+        cmbFilm->Items->EndUpdate();
+    }
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormRecenzija::cmbFilmChange(TObject *Sender)
+{
+    if (cmbFilm->ItemIndex <= 0) {
+        editIndex = -1;
+        edtFilm->Clear();
+        memTekst->Clear();
+        TrackBarOcjena->Position = 5;
+        dtpDatum->Date = Now();
+        ButtonSpremiRecenziju->Caption = "Spremi recenziju";
+        return;
+    }
+
+    editIndex = (int)(NativeInt)cmbFilm->Items->Objects[cmbFilm->ItemIndex];
+
+    String putanja = PutanjaJSON();
+    if (!TFile::Exists(putanja)) return;
+
+    TStringList *sl = new TStringList();
+    sl->LoadFromFile(putanja, TEncoding::UTF8);
+    TJSONValue *root = TJSONObject::ParseJSONValue(sl->Text.Trim());
+    delete sl;
+
+    if (root && root->ClassNameIs("TJSONArray")) {
+        TJSONArray  *arr = static_cast<TJSONArray*>(root);
+        if (editIndex >= 0 && editIndex < arr->Count) {
+            TJSONObject *obj = static_cast<TJSONObject*>(arr->Items[editIndex]);
+
+            edtFilm->Text            = obj->GetValue("naslov")
+                                       ? obj->GetValue("naslov")->Value() : String("");
+            memTekst->Lines->Text    = obj->GetValue("tekst")
+                                       ? obj->GetValue("tekst")->Value() : String("");
+            TrackBarOcjena->Position = StrToIntDef(
+                obj->GetValue("ocjena") ? obj->GetValue("ocjena")->Value() : String("5"), 5);
+            dtpDatum->Date           = StrToDateDef(
+                obj->GetValue("datum") ? obj->GetValue("datum")->Value() : String(""), Now());
+            ButtonSpremiRecenziju->Caption = "Izmijeni recenziju";
+        }
+        delete root;
+    }
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormRecenzija::DohvatiRecenzijeIzBazeUJSON()
+{
+    try {
+        FDQueryUnosRecenzije->Close();
+        FDQueryUnosRecenzije->SQL->Text =
+            "SELECT id, naslov, tekst, ocjena, datum "
+            "FROM recenzija "
+            "WHERE korisnik_id = :korisnik_id "
+            "ORDER BY id";
+        FDQueryUnosRecenzije->ParamByName("korisnik_id")->AsInteger = TRENUTNI_KORISNIK_ID;
+        FDQueryUnosRecenzije->Open();
+
+        TJSONArray *arr = new TJSONArray();
+        try {
+            while (!FDQueryUnosRecenzije->Eof) {
+                TJSONObject *obj = new TJSONObject();
+                obj->AddPair("id",
+                    new TJSONNumber(FDQueryUnosRecenzije->FieldByName("id")->AsInteger));
+                obj->AddPair("naslov",
+                    FDQueryUnosRecenzije->FieldByName("naslov")->AsString);
+                obj->AddPair("tekst",
+                    FDQueryUnosRecenzije->FieldByName("tekst")->AsString);
+                obj->AddPair("ocjena",
+                    new TJSONNumber(FDQueryUnosRecenzije->FieldByName("ocjena")->AsInteger));
+                obj->AddPair("datum",
+                    FormatDateTime("yyyy-mm-dd",
+                        FDQueryUnosRecenzije->FieldByName("datum")->AsDateTime));
+                arr->AddElement(obj);
+                FDQueryUnosRecenzije->Next();
+            }
+            FDQueryUnosRecenzije->Close();
+
+            String putanja = PutanjaJSON();
+            String jsonString = arr->ToString();
+
+            TFileStream *fs = new TFileStream(putanja, fmCreate);
+            try {
+                TBytes bytes = TEncoding::UTF8->GetBytes(jsonString);
+                if (bytes.Length > 0)
+                    fs->WriteBuffer(&bytes[0], bytes.Length);
+            } __finally {
+                delete fs;
+            }
+        } __finally {
+            delete arr;
+        }
+    } catch (Exception &e) {
+        ShowMessage("Greska kod dohvata recenzija iz baze: " + e.Message);
+    }
+}
+//---------------------------------------------------------------------------
+void __fastcall TFormRecenzija::ButtonOdustaniClick(TObject *Sender)
+{
+    cmbFilm->ItemIndex = 0;
+    cmbFilmChange(NULL);
+}
+//---------------------------------------------------------------------------
+// Prolazi kroz JSON i za svaku stavku radi UPSERT u bazu
+// (INSERT ako id ne postoji, UPDATE ako postoji - MySQL to rjesava sam)
+void __fastcall TFormRecenzija::SinkronizirajJSONuBazu()
+{
+    String putanja = PutanjaJSON();
+    if (!TFile::Exists(putanja)) return;
+
+    TStringList *sl = new TStringList();
+    sl->LoadFromFile(putanja, TEncoding::UTF8);
+    TJSONValue *root = TJSONObject::ParseJSONValue(sl->Text.Trim());
+    delete sl;
+
+    if (!root || !root->ClassNameIs("TJSONArray")) {
+        if (root) delete root;
+        return;
+    }
+
+    TJSONArray *arr = static_cast<TJSONArray*>(root);
+
+    for (int i = 0; i < arr->Count; i++) {
+        TJSONObject *obj = static_cast<TJSONObject*>(arr->Items[i]);
+
+        int    id     = StrToIntDef(obj->GetValue("id")->Value(), 0);
+        String naslov = obj->GetValue("naslov") ? obj->GetValue("naslov")->Value() : String("");
+        String tekst  = obj->GetValue("tekst")  ? obj->GetValue("tekst")->Value()  : String("");
+        int    ocjena = StrToIntDef(
+            obj->GetValue("ocjena") ? obj->GetValue("ocjena")->Value() : String("5"), 5);
+        TDateTime datum = StrToDateDef(
+            obj->GetValue("datum") ? obj->GetValue("datum")->Value() : String(""), Now());
+
+        FDQueryUnosRecenzije->Close();
+        FDQueryUnosRecenzije->SQL->Text =
+            "INSERT INTO recenzija (id, naslov, tekst, ocjena, datum, korisnik_id) "
+            "VALUES (:id, :naslov, :tekst, :ocjena, :datum, :korisnik_id) "
+            "ON DUPLICATE KEY UPDATE "
+            "naslov = VALUES(naslov), tekst = VALUES(tekst), "
+            "ocjena = VALUES(ocjena), datum = VALUES(datum)";
+        FDQueryUnosRecenzije->ParamByName("id")->AsInteger          = id;
+        FDQueryUnosRecenzije->ParamByName("naslov")->AsString       = naslov;
+        FDQueryUnosRecenzije->ParamByName("tekst")->AsString        = tekst;
+        FDQueryUnosRecenzije->ParamByName("ocjena")->AsInteger      = ocjena;
+        FDQueryUnosRecenzije->ParamByName("datum")->AsDateTime      = datum;
+        FDQueryUnosRecenzije->ParamByName("korisnik_id")->AsInteger = TRENUTNI_KORISNIK_ID;
+        FDQueryUnosRecenzije->ExecSQL();
+    }
+
+    delete root;
+}
+//---------------------------------------------------------------------------
+// Vraca najveci id iz JSON-a (0 ako je prazan)
+static int MaxIdIzJSON(TJSONArray *arr)
+{
+    int maxId = 0;
+    for (int i = 0; i < arr->Count; i++) {
+        TJSONObject *obj = static_cast<TJSONObject*>(arr->Items[i]);
+        TJSONValue *idVal = obj->GetValue("id");
+        if (idVal) {
+            int id = StrToIntDef(idVal->Value(), 0);
+            if (id > maxId) maxId = id;
+        }
+    }
+    return maxId;
+}
+//---------------------------------------------------------------------------
 void __fastcall TFormRecenzija::ButtonSpremiRecenzijuClick(TObject *Sender)
 {
+    if (edtFilm->Text.Trim().IsEmpty()) {
+        ShowMessage("Naslov filma ne smije biti prazan!");
+        return;
+    }
     if (memTekst->Lines->Text.Trim().IsEmpty()) {
         ShowMessage("Tekst recenzije ne smije biti prazan!");
         return;
     }
 
-    String putanja = TPath::Combine(ExtractFilePath(Application->ExeName), "..\\..\\recenzija.json");
+    String putanja = PutanjaJSON();
 
     // ── MOD EDITIRANJA ────────────────────────────────────────────────────────
     if (editIndex >= 0) {
@@ -84,6 +269,8 @@ void __fastcall TFormRecenzija::ButtonSpremiRecenzijuClick(TObject *Sender)
             TJSONArray  *arr = static_cast<TJSONArray*>(root);
             TJSONObject *obj = static_cast<TJSONObject*>(arr->Items[editIndex]);
 
+            // id ostaje isti, mijenjamo samo ostala polja
+            obj->RemovePair("naslov"); obj->AddPair("naslov", edtFilm->Text.Trim());
             obj->RemovePair("ocjena"); obj->AddPair("ocjena", new TJSONNumber(TrackBarOcjena->Position));
             obj->RemovePair("tekst");  obj->AddPair("tekst",  memTekst->Lines->Text.Trim());
             obj->RemovePair("datum");  obj->AddPair("datum",  FormatDateTime("yyyy-mm-dd", dtpDatum->Date));
@@ -94,8 +281,11 @@ void __fastcall TFormRecenzija::ButtonSpremiRecenzijuClick(TObject *Sender)
             delete fs;
             delete root;
 
-            ShowMessage("Recenzija uspjesno izmijenjena!");
-            UcitajFilmoveUCombo();
+            // 2. korak: sinkroniziraj JSON -> baza
+            SinkronizirajJSONuBazu();
+
+            ShowMessage("Recenzija spremljena u JSON i sinkronizirana s bazom!");
+            UcitajRecenzijeUCombo();
             cmbFilm->ItemIndex = 0;
             cmbFilmChange(NULL);
             ModalResult = mrOk;
@@ -107,11 +297,6 @@ void __fastcall TFormRecenzija::ButtonSpremiRecenzijuClick(TObject *Sender)
     }
 
     // ── MOD NOVOG UNOSA ───────────────────────────────────────────────────────
-    if (edtFilm->Text.Trim().IsEmpty()) {
-        ShowMessage("Naziv filma ne smije biti prazan!");
-        return;
-    }
-
     try {
         TJSONArray *jsonArray = new TJSONArray();
 
@@ -123,33 +308,23 @@ void __fastcall TFormRecenzija::ButtonSpremiRecenzijuClick(TObject *Sender)
 
             if (!sadrzaj.IsEmpty()) {
                 TJSONValue *parsiran = TJSONObject::ParseJSONValue(sadrzaj);
-
                 if (parsiran && parsiran->ClassNameIs("TJSONArray")) {
-                    TJSONArray *postojeciArray = static_cast<TJSONArray*>(parsiran);
-
-                    for (int i = 0; i < postojeciArray->Count; i++) {
-                        TJSONObject *obj = static_cast<TJSONObject*>(postojeciArray->Items[i]);
-
-                        if (obj->GetValue("film")->Value() == edtFilm->Text.Trim()) {
-                            ShowMessage("Recenzija za ovaj film vec postoji!\nOdaberi ga iz padajuceg izbornika za uredivanje.");
-                            delete jsonArray;
-                            delete parsiran;
-                            return;
-                        }
-                    }
-
                     delete jsonArray;
-                    jsonArray = postojeciArray;
-                } else {
+                    jsonArray = static_cast<TJSONArray*>(parsiran);
+                } else if (parsiran) {
                     delete parsiran;
                 }
             }
         }
 
+        // Generiraj novi id = max(id) + 1
+        int noviId = MaxIdIzJSON(jsonArray) + 1;
+
         TJSONObject *rec = new TJSONObject();
-        rec->AddPair("film",   edtFilm->Text.Trim());
-        rec->AddPair("ocjena", new TJSONNumber(TrackBarOcjena->Position));
+        rec->AddPair("id",     new TJSONNumber(noviId));
+        rec->AddPair("naslov", edtFilm->Text.Trim());
         rec->AddPair("tekst",  memTekst->Lines->Text.Trim());
+        rec->AddPair("ocjena", new TJSONNumber(TrackBarOcjena->Position));
         rec->AddPair("datum",  FormatDateTime("yyyy-mm-dd", dtpDatum->Date));
 
         jsonArray->AddElement(rec);
@@ -161,8 +336,11 @@ void __fastcall TFormRecenzija::ButtonSpremiRecenzijuClick(TObject *Sender)
         delete fs;
         delete jsonArray;
 
-        ShowMessage("Recenzija uspjesno spremljena!");
-        UcitajFilmoveUCombo();
+        // 2. korak: sinkroniziraj JSON -> baza
+        SinkronizirajJSONuBazu();
+
+        ShowMessage("Recenzija spremljena u JSON i upisana u bazu!");
+        UcitajRecenzijeUCombo();
         cmbFilm->ItemIndex = 0;
         cmbFilmChange(NULL);
         ModalResult = mrOk;
@@ -170,62 +348,5 @@ void __fastcall TFormRecenzija::ButtonSpremiRecenzijuClick(TObject *Sender)
     } catch (Exception &e) {
         ShowMessage(e.Message);
     }
-
-	/*
-    ADOQuery1->SQL->Text =
-    "INSERT INTO Recenzije (IDRecenzije, Tekst, Ocjena, Datum, FilmID, KorisnikID) "
-    "VALUES (:id, :tekst, :ocjena, :datum, :filmid, :korisnikid)";
-
-	ADOQuery1->Parameters->ParamByName("id")->Value         = idRecenzije;
-	ADOQuery1->Parameters->ParamByName("tekst")->Value      = tekst;
-	ADOQuery1->Parameters->ParamByName("ocjena")->Value     = ocjena;
-	ADOQuery1->Parameters->ParamByName("datum")->Value      = datum;
-	ADOQuery1->Parameters->ParamByName("filmid")->Value     = filmID;
-	ADOQuery1->Parameters->ParamByName("korisnikid")->Value = korisnikID;
-	ADOQuery1->ExecSQL();
-    */
 }
 //---------------------------------------------------------------------------
-void __fastcall TFormRecenzija::ButtonOdustaniClick(TObject *Sender)
-{
-    cmbFilm->ItemIndex = 0;
-    cmbFilmChange(NULL);
-}
-//---------------------------------------------------------------------------
-void __fastcall TFormRecenzija::cmbFilmChange(TObject *Sender)
-{
-    if (cmbFilm->ItemIndex <= 0) {
-        editIndex = -1;
-        edtFilm->Enabled = true;
-        edtFilm->Clear();
-        memTekst->Clear();
-        TrackBarOcjena->Position = 5;
-        dtpDatum->Date = Now();
-        ButtonSpremiRecenziju->Caption = "Spremi recenziju";
-        return;
-    }
-
-    editIndex = cmbFilm->ItemIndex - 1;
-
-    String putanja = TPath::Combine(ExtractFilePath(Application->ExeName), "..\\..\\recenzija.json");
-    TStringList *sl = new TStringList();
-    sl->LoadFromFile(putanja, TEncoding::UTF8);
-    TJSONValue *root = TJSONObject::ParseJSONValue(sl->Text.Trim());
-    delete sl;
-
-    if (root && root->ClassNameIs("TJSONArray")) {
-        TJSONArray  *arr = static_cast<TJSONArray*>(root);
-        TJSONObject *obj = static_cast<TJSONObject*>(arr->Items[editIndex]);
-
-        edtFilm->Text            = obj->GetValue("film")->Value();
-        edtFilm->Enabled         = false;
-        memTekst->Lines->Text    = obj->GetValue("tekst")->Value();
-        TrackBarOcjena->Position = StrToIntDef(obj->GetValue("ocjena")->Value(), 5);
-        dtpDatum->Date           = StrToDateDef(obj->GetValue("datum")->Value(), Now());
-        ButtonSpremiRecenziju->Caption = "Izmijeni recenziju";
-
-        delete root;
-    }
-}
-//---------------------------------------------------------------------------
-
