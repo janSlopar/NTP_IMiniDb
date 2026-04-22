@@ -32,8 +32,8 @@ class TFormPrijava : public TForm
 __published:	// IDE-managed Components
 	TGroupBox *GroupBoxPrijava;
 	TButton *ButtonPrijava;
-	TLabel *Label1;
-	TLabel *Label2;
+	TLabel *LabelKorImePrijava;
+	TLabel *LabelLozinkaPrijava;
 	TEdit *EditKorImePrijava;
 	TEdit *EditLozinkaPrijava;
 	TButton *ButtonHRV;

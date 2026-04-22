@@ -18,14 +18,14 @@ object FormPrijava: TFormPrijava
     Width = 361
     Height = 225
     TabOrder = 0
-    object Label1: TLabel
+    object LabelKorImePrijava: TLabel
       Left = 64
       Top = 40
       Width = 81
       Height = 15
       Caption = 'Korisni'#269'ko ime:'
     end
-    object Label2: TLabel
+    object LabelLozinkaPrijava: TLabel
       Left = 64
       Top = 80
       Width = 40

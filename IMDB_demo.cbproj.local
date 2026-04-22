@@ -1,11 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-  <Transactions>
-    <Transaction>2026.04.21 19:55:58.563,=C:\Users\Jan\Desktop\4sem\NTP\File1.cpp</Transaction>
-    <Transaction>2026.04.21 19:56:33.615,C:\Users\Jan\Desktop\4sem\NTP\PosterDretva.cpp=C:\Users\Jan\Desktop\4sem\NTP\File1.cpp</Transaction>
-    <Transaction>2026.04.21 19:57:27.298,C:\Users\Jan\Desktop\4sem\NTP\PosterDretva.cpp=</Transaction>
-    <Transaction>2026.04.21 19:57:37.916,=C:\Users\Jan\Desktop\4sem\NTP\Unit1.cpp</Transaction>
-    <Transaction>2026.04.21 19:57:49.019,C:\Users\Jan\Desktop\4sem\NTP\PosterDretva.h=C:\Users\Jan\Desktop\4sem\NTP\Unit1.h</Transaction>
-    <Transaction>2026.04.21 19:57:49.019,C:\Users\Jan\Desktop\4sem\NTP\PosterDretva.cpp=C:\Users\Jan\Desktop\4sem\NTP\Unit1.cpp</Transaction>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.563,=C:\Users\Jan\Desktop\4sem\NTP\File1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.615,C:\Users\Jan\Desktop\4sem\NTP\File1.cpp=C:\Users\Jan\Desktop\4sem\NTP\PosterDretva.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.916,=C:\Users\Jan\Desktop\4sem\NTP\Unit1.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.019,C:\Users\Jan\Desktop\4sem\NTP\Unit1.cpp=C:\Users\Jan\Desktop\4sem\NTP\PosterDretva.cpp</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.019,C:\Users\Jan\Desktop\4sem\NTP\Unit1.h=C:\Users\Jan\Desktop\4sem\NTP\PosterDretva.h</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.298,C:\Users\Jan\Desktop\4sem\NTP\PosterDretva.cpp=</Transaction>
+    <Transaction>2026.04.22 20:42:30.454,=C:\Users\Jan\Desktop\4sem\NTP\File1.cpp</Transaction>
+    <Transaction>2026.04.22 20:42:40.747,C:\Users\Jan\Desktop\4sem\NTP\PostaviJezikGrida.cpp=C:\Users\Jan\Desktop\4sem\NTP\File1.cpp</Transaction>
+    <Transaction>2026.04.22 20:44:04.294,C:\Users\Jan\Desktop\4sem\NTP\PostaviJezikGrida.cpp=</Transaction>
+    <Transaction>2026.04.22 20:44:12.839,=C:\Users\Jan\Desktop\4sem\NTP\Unit1.cpp</Transaction>
+    <Transaction>2026.04.22 20:44:21.817,C:\Users\Jan\Desktop\4sem\NTP\PostaviJezikGrida.h=C:\Users\Jan\Desktop\4sem\NTP\Unit1.h</Transaction>
+    <Transaction>2026.04.22 20:44:21.817,C:\Users\Jan\Desktop\4sem\NTP\PostaviJezikGrida.cpp=C:\Users\Jan\Desktop\4sem\NTP\Unit1.cpp</Transaction>
   </Transactions>
 </BorlandProject>

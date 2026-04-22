@@ -70,7 +70,7 @@ __published:	// IDE-managed Components
 	TLabel *Label1;
 	TLabel *LabelOmiljeniFilmoviNaslov;
 	TLabel *LabelListaZaGledanje;
-	TButton *Button1;
+	TButton *ButtonRecenzije;
 	TButton *ButtonRESTBaza;
 	TDBGrid *DBGridFilmoviBaza;
 	TFDConnection *FDConnectionZaFilmove;
@@ -82,7 +82,7 @@ __published:	// IDE-managed Components
 	TRESTClient *RESTClient1;
 	TRESTRequest *RESTRequest1;
 	TRESTResponse *RESTResponse1;
-	TLabel *Label2;
+	TLabel *LabelFilm;
 	TEdit *editFilmRESTBaza;
 	TFDQuery *FDQuerySortGodina;
 	TFDQuery *FDQueryFilterOcjena;
@@ -117,6 +117,7 @@ __published:	// IDE-managed Components
 	void __fastcall StilizirajLabele(TLabel *lbl);
     void __fastcall OsvjeziBrojFilmova();
 	void __fastcall ToolButtonSviPosteriClick(TObject *Sender);
+    void __fastcall PostaviJezikGrida(String jezik);
 
     private:	// User declarations
 

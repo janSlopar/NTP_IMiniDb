@@ -60,7 +60,7 @@ object FormSviFilmovi: TFormSviFilmovi
     Height = 15
     Caption = 'Lista za gledanje'
   end
-  object Label2: TLabel
+  object LabelFilm: TLabel
     Left = 8
     Top = 521
     Width = 26
@@ -69,17 +69,17 @@ object FormSviFilmovi: TFormSviFilmovi
   end
   object LabelPoster: TLabel
     Left = 880
-    Top = 516
+    Top = 521
     Width = 36
     Height = 15
     Caption = 'Poster:'
   end
   object LabelUkupnoFilmova: TLabel
-    Left = 663
+    Left = 740
     Top = 521
-    Width = 45
+    Width = 8
     Height = 15
-    Caption = 'Ukupno:'
+    Caption = 'U'
   end
   object ButtonDodajWatchlistu: TButton
     Left = 1104
@@ -197,7 +197,7 @@ object FormSviFilmovi: TFormSviFilmovi
     TabOrder = 11
     OnClick = ButtonPregledajListuClick
   end
-  object Button1: TButton
+  object ButtonRecenzije: TButton
     Left = 880
     Top = 436
     Width = 185
@@ -216,7 +216,7 @@ object FormSviFilmovi: TFormSviFilmovi
   end
   object editFilmRESTBaza: TEdit
     Left = 88
-    Top = 530
+    Top = 518
     Width = 154
     Height = 23
     TabOrder = 14
